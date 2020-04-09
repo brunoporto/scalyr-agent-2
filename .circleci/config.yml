@@ -311,12 +311,12 @@ commands:
             pip install "tox==<< pipeline.parameters.default_tox_version >>"
 
       - run:
-          name: "Get Dockerfile for current agent image."
+          name: "Get checksum of all that included to used images."
           command: |
             # Add agent source code to PYTHONPATH to be able to import its components.
-            export PYTHONPATH=.:${PYTHONPATH}
+            export PYTHONPATH=.:${Pagent_monitors_ubuntuYTHONPATH}
 
-            # generate file with checksum that is calculated for every required file.
+            # generate file with checksum that is calculated for every required file included to image.
             python -m tests.image_builder.distributions.<< parameters.distribution >>.cmd --checksum > ~/checksum
             python -m tests.image_builder.distributions.fpm_package_builder.cmd --checksum > ~/fpm_builder_checksum
             python -m tests.image_builder.monitors.base.cmd --checksum > ~/monitors_builder_checksum

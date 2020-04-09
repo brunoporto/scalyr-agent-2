@@ -65,9 +65,28 @@ def dockerized_case(
 
             docker_client = docker.from_env()
 
-            print("Create container from '{0}' image.".format(builder.image_tag))
+            test_file_name = Path(file_path).name.replace(".py", "")
+
+            container_name = "{0}-{1}-{2}".format(
+                builder.image_tag, test_file_name, func_name
+            )
+
+            print(
+                "Create container from '{0}' image named: '{1}'".format(
+                    builder.image_tag, container_name
+                )
+            )
+
+            # remove container if it was created in previous tests.
+            try:
+                container = docker_client.containers.get(container_name)
+                container.remove(force=True)
+            except docker.errors.NotFound:
+                pass
+
             container = docker_client.containers.run(
                 builder.image_tag,
+                name=container_name,
                 detach=True,
                 command=command,
                 stdout=True,

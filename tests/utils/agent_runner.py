@@ -335,6 +335,7 @@ class AgentRunner(object):
             "server_attributes": {"serverHost": self._server_host},
             "logs": list(self._log_files.values()),
             "monitors": [],
+            # "disable_send_requests": True
         }
 
     @staticmethod

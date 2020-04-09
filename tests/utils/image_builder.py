@@ -171,6 +171,7 @@ class AgentImageBuilder(object):
             return
 
         print("Build image: '{0}'".format(self.image_tag))
+        # create temporary folder for build context.
         build_context_path = create_tmp_directory(
             suffix="{0}-build-context".format(self.image_tag)
         )
@@ -185,6 +186,9 @@ class AgentImageBuilder(object):
             dockerfile=six.text_type(dockerfile_path),
             rm=True,
         )
+
+        # remove temporary build context.
+        shutil.rmtree(six.text_type(build_context_path))
 
         for chunk in output_gen:
             print(chunk.get("stream", ""), end="")

@@ -17,32 +17,19 @@ from __future__ import absolute_import
 from __future__ import unicode_literals
 
 import os
-import shutil
-import tempfile
 
 import pytest
 import yaml
 
 from scalyr_agent import compat
 from tests.utils.compat import Path
-from tests.utils.common import TEMP_PREFIX
-
-
-@pytest.fixture(scope="session", autouse=True)
-def clear_tmp():
-    for child in Path(tempfile.gettempdir()).iterdir():
-        if child.name.startswith(TEMP_PREFIX):
-            if child.is_dir():
-                shutil.rmtree(str(child))
-            else:
-                os.remove(str(child))
 
 
 def pytest_addoption(parser):
     parser.addoption(
         "--test-config",
         action="store",
-        default=Path(__file__).parent / "config.yml",
+        default=str(Path(__file__).parent / "config.yml"),
         help="Path to yaml file with essential agent settings and another test related settings. "
         "Fields from this config file will be set as environment variables.",
     )

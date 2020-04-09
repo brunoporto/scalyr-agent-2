@@ -29,7 +29,7 @@ import six
 from tests.utils.agent_runner import AgentRunner
 from tests.utils.log_reader import LogReader
 from tests.utils.dockerized import dockerized_case
-from tests.image_builder.monitors.url import UrlMonitorBuilder
+from tests.image_builder.monitors.common import CommonMonitorBuilder
 
 HOST = "127.0.0.1"
 PORT = 5000
@@ -53,18 +53,20 @@ class UrlMonitorAgentRunner(AgentRunner):
                 "url": "http://{0}:{1}/test".format(HOST, PORT),
             }
         )
+        config["disable_send_requests"] = True
 
         return config
 
 
 def _test(python_version):
     process = subprocess.Popen(
-        "python -m flask run", shell=True, env={"FLASK_APP": "/server.py"}
+        "python -m flask run", shell=True, env={"FLASK_APP": "/dummy-flask-server.py"}
     )
+    time.sleep(5)
     runner = UrlMonitorAgentRunner()
 
     runner.start(executable=python_version)
-    time.sleep(1)
+    time.sleep(5)
     reader = LogReader(runner.url_monitor_log_path)
     reader.start(wait_for_data=False)
 
@@ -79,12 +81,12 @@ def _test(python_version):
 
 
 @pytest.mark.usefixtures("agent_environment")
-@dockerized_case(UrlMonitorBuilder, __file__)
+@dockerized_case(CommonMonitorBuilder, __file__)
 def test_url_python2(request):
     _test(python_version="python2")
 
 
 @pytest.mark.usefixtures("agent_environment")
-@dockerized_case(UrlMonitorBuilder, __file__)
+@dockerized_case(CommonMonitorBuilder, __file__)
 def test_url_python3(request):
     _test(python_version="python3")
