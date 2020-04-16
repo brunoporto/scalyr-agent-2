@@ -1234,7 +1234,7 @@ jobs:
     executor:
       name: win/default # executor type
       size: "medium" # resource class, can be "medium", "large", "xlarge", "2xlarge", defaults to "medium" if not specified
-
+      shell: powershell.exe
     steps:
       # Commands are run in a Windows virtual machine environment
       - checkout
