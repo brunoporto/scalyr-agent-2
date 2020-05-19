@@ -935,6 +935,24 @@ class TestConfiguration(TestConfigurationBase):
 
         self.assertEquals(len(config.log_configs), 2)
 
+    def test_additional_config_dir_absolute(self):
+        self.assertFalse(True)
+
+    def test_additional_config_dir_relative(self):
+        self.assertFalse(True)
+
+    def test_additional_config_dir(self):
+        self.assertFalse(True)
+
+    def test_no_additional_config(self):
+        self.assertFalse(True)
+
+    def test_raw_additional_config(self):
+        self.assertFalse(True)
+
+    def test_no_raw_additional_config(self):
+        self.assertFalse(True)
+
     def test_parser_specification(self):
         self._write_file_with_separator_conversion(
             """ {
