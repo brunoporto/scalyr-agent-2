@@ -151,7 +151,7 @@ class ScalyrAgent(object):
         self.__config_file_path = None
 
         # An extra directory for config snippets
-        self.__additional_config_dir = None
+        self.__extra_config_dir = None
 
         # If the current contents of the configuration file has errors in it, then this will be set to the config
         # object produced by reading it.
@@ -249,8 +249,8 @@ class ScalyrAgent(object):
         self.__no_fork = command_options.no_fork
         no_check_remote = False
 
-        self.__additional_config_dir = Configuration.get_additional_config_dir(
-            command_options.additional_config_dir
+        self.__extra_config_dir = Configuration.get_extra_config_dir(
+            command_options.extra_config_dir
         )
 
         # We process for the 'version' command early since we do not need the configuration file for it.
@@ -375,7 +375,7 @@ class ScalyrAgent(object):
             config_file_path,
             self.__default_paths,
             log,
-            additional_config_dir=self.__additional_config_dir,
+            extra_config_dir=self.__extra_config_dir,
         )
 
     def __verify_config(
@@ -1764,9 +1764,9 @@ if __name__ == "__main__":
         metavar="FILE",
     )
     parser.add_option(
-        "--additional-config-dir",
+        "--extra-config-dir",
         default=None,
-        help="An additional directory to check for configuration files",
+        help="An extra directory to check for configuration files",
         metavar="PATH",
     )
     parser.add_option(

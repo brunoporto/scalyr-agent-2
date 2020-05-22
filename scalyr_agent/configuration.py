@@ -76,7 +76,7 @@ class Configuration(object):
     DEFAULT_K8S_IGNORE_NAMESPACES = ["kube-system"]
     DEFAULT_K8S_INCLUDE_NAMESPACES = ["*"]
 
-    def __init__(self, file_path, default_paths, logger, additional_config_dir=None):
+    def __init__(self, file_path, default_paths, logger, extra_config_dir=None):
         # Captures all environment aware variables for testing purposes
         self._environment_aware_map = {}
         self.__file_path = os.path.abspath(file_path)
@@ -108,7 +108,7 @@ class Configuration(object):
         self.max_allowed_checkpoint_age = 15 * 60
 
         # An additional directory to look for config snippets
-        self.__additional_config_directory = additional_config_dir
+        self.__extra_config_directory = extra_config_dir
 
         self.__logger = logger
 
@@ -159,7 +159,7 @@ class Configuration(object):
             extra_config = self.__list_files(self.config_directory)
 
             # Plus any configuration snippets in the additional config directory
-            extra_config.extend(self.__list_files(self.additional_config_directory))
+            extra_config.extend(self.__list_files(self.extra_config_directory))
 
             # Now, look for any additional configuration in the config fragment directory.
             for fp in extra_config:
@@ -875,24 +875,24 @@ class Configuration(object):
         return self.__get_config().get_string("config_directory")
 
     @property
-    def additional_config_directory(self):
-        """Returns the configuration value for `additional_config_directory`, resolved to full path if
-        necessary."""
+    def extra_config_directory(self):
+        """Returns the configuration value for `extra_config_directory`, resolved to full path if
+        necessary.  """
 
-        # If `additional_config_directory` is a relative path, then it will be relative
+        # If `extra_config_directory` is a relative path, then it will be relative
         # to the directory containing the main config file
-        if self.__additional_config_directory is None:
+        if self.__extra_config_directory is None:
             return None
 
         return self.__resolve_absolute_path(
-            self.__additional_config_directory,
+            self.__extra_config_directory,
             self.__get_parent_directory(self.__file_path),
         )
 
     @property
-    def additional_config_directory_raw(self):
-        """Returns the configuration value for 'additional_config_directory'."""
-        return self.__additional_config_directory
+    def extra_config_directory_raw(self):
+        """Returns the configuration value for 'extra_config_directory'."""
+        return self.__extra_config_directory
 
     @property
     def max_allowed_request_size(self):
@@ -1152,16 +1152,16 @@ class Configuration(object):
                 other.__config.put("debug_level", original_debug_level)
 
     @staticmethod
-    def get_additional_config_dir(additional_config_dir):
+    def get_extra_config_dir(extra_config_dir):
         """
         Returns the value for the additional config directory - either from the value passed
-        in, or from the environment variable `SCALYR_ADDITIONAL_CONFIG_DIR`.
+        in, or from the environment variable `SCALYR_EXTRA_CONFIG_DIR`.
 
-        @param additional_config_dir: the additinal configuration directory.  If this value is
-            None, then the environment variable `SCALYR_ADDITIONAL_CONFIG_DIR` is read for the result
+        @param extra_config_dir: the additinal configuration directory.  If this value is
+            None, then the environment variable `SCALYR_EXTRA_CONFIG_DIR` is read for the result
         """
-        if additional_config_dir is None:
-            result = compat.os_getenv_unicode("SCALYR_ADDITIONAL_CONFIG_DIR")
+        if extra_config_dir is None:
+            result = compat.os_getenv_unicode("SCALYR_EXTRA_CONFIG_DIR")
         return result
 
     @staticmethod
